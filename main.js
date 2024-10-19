@@ -45,6 +45,17 @@ robin.companion.companion = new Character("Frank");
 robin.companion.companion.type = "Flea";
 robin.companion.companion.inventory = ["small hat", "sunglasses"];
 
+
+for (const belonging of robin.inventory) {
+  console.log(`${robin.name}'s belonging: ${belonging}`);
+}
+
+for (const belonging of robin.companion.companion.inventory) {
+  console.log(`${robin.companion.companion.name}'s belonging: ${belonging}`);
+}
+
+// Part 2
+
 console.log(robin);
 
 // Part 3 / Part 4 / Part 6
