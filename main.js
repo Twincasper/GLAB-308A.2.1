@@ -46,3 +46,45 @@ robin.companion.companion.type = "Flea";
 robin.companion.companion.inventory = ["small hat", "sunglasses"];
 
 console.log(robin);
+
+// Part 3
+
+class Adventurer extends Character {
+  constructor (name, role) {
+    super(name);
+    // Adventurers have specialized roles.
+    this.role = role;
+    // Every adventurer starts with a bed and 50 gold coins.
+    this.inventory.push("bedroll", "50 gold coins");
+  }
+  // Adventurers have the ability to scout ahead of them.
+  scout () {
+    console.log(`${this.name} is scouting ahead...`);
+    super.roll();
+  }
+}
+
+/*
+Next, create a Companion class with properties and methods specific to the companions.
+Finally, change the declaration of Robin and the companions to use the new Adventurer and Companion classes.
+*/
+
+class Companion extends Character {
+  constructor (name, type) {
+    super(name);
+    this.type = type;
+    this.belongings = [];
+  }
+  help () {
+    console.log(`${this.name} is helping ${this.adventurer.name}...`);
+    super.roll();
+  }
+}
+
+const leo = new Companion("Leo", "Cat");
+
+const adventurerRobin = new Adventurer("Robin", "Bard");
+
+adventurerRobin.companion = leo;
+
+adventurerRobin.scout();
