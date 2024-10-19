@@ -58,7 +58,7 @@ console.log(robin);
 // Log the winner of the duel: the adventurer still above 50 health.
 
 class Adventurer extends Character {
-  static ROLES = ["Fighter", "Cleric", "Wizard", "Rogue", "Druid", "Bard", "Warlock", "Paladin", "Monk", "Sorcerer", "Ranger"];
+  static ROLES = ["Fighter", "Cleric", "Wizard", "Rogue", "Druid", "Bard", "Warlock", "Paladin", "Monk", "Sorcerer", "Ranger", "Barbarian"];
   static RACE = ["Human", "Elf", "Dwarf", "Drow", "Half-Elf", "Half-Orc", "Dragonborn", "Tiefling"];
   static ACTION_POINTS = 1;
   
@@ -76,7 +76,7 @@ class Adventurer extends Character {
       throw new Error(`Invalid race: ${race}. Here are the races available ${Adventurer.RACE.join(", ")}`);
     }
   }
-
+  
   duel(opponent) {
     while (this.health > 50 && opponent.health > 50) {
       const adventurerRoll = this.roll();
@@ -94,6 +94,42 @@ class Adventurer extends Character {
     super.roll();
   }
 }
+
+class Tiefling extends Adventurer {
+  static SUBRACES = ["Asmodeus", "Mephistopheles", "Zariel"];
+
+  constructor(name, role, subrace) {
+    super(name, role, "Tiefling");
+
+    if (!Tiefling.SUBRACES.includes(subrace)) {
+      throw new Error(`Invalid subrace: ${subrace}. Choose from: ${Tiefling.SUBRACES.join(", ")}`);
+    }
+
+    this.subrace = subrace;
+    this.darkvision = true;
+    this.hellishResistance = "Fire";
+  }
+
+  darkvisionAbility() {
+    console.log(`${this.name} uses Darkvision. They can see in the dark up to 40 ft.`);
+  }
+
+  hellishResistance(damage) {
+    const reducedDamage = damage / 2;
+    this.health -= reducedDamage;
+    console.log(`${this.name} uses Hellish Resistance. They take only ${reducedDamage} fire damage instead of ${damage}.`);
+  }
+  duel(opponent) {
+    console.log(`${this.name}, the Tiefling, challenges ${opponent.name} to a duel.`);
+    super.duel(opponent);
+    if (this.hellishResistance && Math.random() > 0.5) {
+      console.log(`${this.name}'s infernal blood shields them, taking half damage in fire-based attacks.`);
+    }
+  }
+}
+
+const karlach = new Tiefling("Karlach", "Barbarian", "Zariel");
+karlach.duel(robin);
 
 class Companion extends Character {
   constructor (name, type) {
