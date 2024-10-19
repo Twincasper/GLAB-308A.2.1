@@ -34,6 +34,7 @@ class Character {
   roll(mod = 0) {
     const result = Math.floor(Math.random() * 20) + 1 + mod;
     console.log(`${this.name} rolled a ${result}.`);
+    return result;
   }
 }
 
@@ -48,14 +49,6 @@ robin.companion.companion.inventory = ["small hat", "sunglasses"];
 console.log(robin);
 
 // Part 3 / Part 4 / Part 6
-
-// Create an additional method, duel(), for the Adventurer class with the following functionality:
-// Accept an Adventurer as a parameter.
-// Use the roll() functionality to create opposing rolls for each adventurer.
-// Subtract 1 from the adventurer with the lower roll.
-// Log the results of this “round” of the duel, including the rolls and current health values.
-// Repeat this process until one of the two adventurers reaches 50 health.
-// Log the winner of the duel: the adventurer still above 50 health.
 
 class Adventurer extends Character {
   static ROLES = ["Fighter", "Cleric", "Wizard", "Rogue", "Druid", "Bard", "Warlock", "Paladin", "Monk", "Sorcerer", "Ranger", "Barbarian"];
@@ -122,9 +115,6 @@ class Tiefling extends Adventurer {
   duel(opponent) {
     console.log(`${this.name}, the Tiefling, challenges ${opponent.name} to a duel.`);
     super.duel(opponent);
-    if (this.hellishResistance && Math.random() > 0.5) {
-      console.log(`${this.name}'s infernal blood shields them, taking half damage in fire-based attacks.`);
-    }
   }
 }
 
@@ -154,21 +144,39 @@ adventurerRobin.scout();
 // Part 5 - Constructor factory
 
 class AdventurerFactory {  
-  constructor (role) {
+  constructor(role, race) {
+    if (!Adventurer.ROLES.includes(role)) {
+      throw new Error(`Invalid role: ${role}. You gotta pick one of these bro: ${Adventurer.ROLES.join(", ")}`);
+    }
+
+    if (!Adventurer.RACE.includes(race)) {
+      throw new Error(`Invalid race: ${race}. Here are the races available ${Adventurer.RACE.join(", ")}`);
+    }
+
     this.role = role;
+    this.race = race;
     this.adventurers = [];
   }
-  generate (name) {
-    const newAdventurer = new Adventurer(name, this.role);
+
+  generate(name) {
+    const newAdventurer = new Adventurer(name, this.role, this.race);
     this.adventurers.push(newAdventurer);
+    return newAdventurer;
   }
-  findByIndex (index) {
+
+  findByIndex(index) {
     return this.adventurers[index];
   }
-  findByName (name) {
+
+  findByName(name) {
     return this.adventurers.find((a) => a.name === name);
   }
 }
 
-const healers = new AdventurerFactory("Healer");
-const robin = healers.generate("Robin");
+const clerics = new AdventurerFactory("Cleric", "Human");
+const shadowheart = clerics.generate("Shadowheart");
+const deebee = clerics.generate("Deebee");
+
+console.log(`\nReturns the first cleric:\n`, clerics.findByIndex(0));
+console.log(`\nFinds deebee by name:\n`, clerics.findByName("Deebee"));
+console.log(`\nAll clerics:\n`, clerics);
