@@ -22,9 +22,9 @@ const adventurer = {
 adventurer.roll();
 adventurer.roll(2);
 
-// Part 2
-
 class Character {
+  static MAX_HEALTH = 100;
+
   constructor(name) {
     this.name = name;
     this.health = 100;
@@ -47,15 +47,28 @@ robin.companion.companion.inventory = ["small hat", "sunglasses"];
 
 console.log(robin);
 
-// Part 3
+// Part 3 / Part 4
 
 class Adventurer extends Character {
-  constructor (name, role) {
+  static ROLES = ["Fighter", "Cleric", "Wizard", "Rogue", "Druid", "Bard", "Warlock", "Paladin", "Monk", "Sorcerer", "Ranger"];
+  static RACE = ["Human", "Elf", "Dwarf", "Drow", "Half-Elf", "Half-Orc", "Dragonborn", "Tiefling"];
+  static ACTION_POINTS = 1;
+  
+  constructor (name, role, race) {
     super(name);
     // Adventurers have specialized roles.
     this.role = role;
+    this.race = race;
     // Every adventurer starts with a bed and 50 gold coins.
     this.inventory.push("bedroll", "50 gold coins");
+
+    if (!Adventurer.ROLES.includes(role)) {
+      throw new Error(`Invalid role: ${role}. You gotta pick one of these bro: ${Adventurer.ROLES.join(", ")}`);
+    }
+
+    if (!Adventurer.RACE.includes(race)) {
+      throw new Error(`Invalid race: ${race}. Here are the races available ${Adventurer.RACE.join(", ")}`);
+    }
   }
   // Adventurers have the ability to scout ahead of them.
   scout () {
@@ -63,11 +76,6 @@ class Adventurer extends Character {
     super.roll();
   }
 }
-
-/*
-Next, create a Companion class with properties and methods specific to the companions.
-Finally, change the declaration of Robin and the companions to use the new Adventurer and Companion classes.
-*/
 
 class Companion extends Character {
   constructor (name, type) {
@@ -83,7 +91,7 @@ class Companion extends Character {
 
 const leo = new Companion("Leo", "Cat");
 
-const adventurerRobin = new Adventurer("Robin", "Bard");
+const adventurerRobin = new Adventurer("Robin", "Bard", "Half-Elf");
 
 adventurerRobin.companion = leo;
 
