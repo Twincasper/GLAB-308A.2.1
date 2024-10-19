@@ -96,3 +96,25 @@ const adventurerRobin = new Adventurer("Robin", "Bard", "Half-Elf");
 adventurerRobin.companion = leo;
 
 adventurerRobin.scout();
+
+// Part 5 - Constructor factory
+
+class AdventurerFactory {  
+  constructor (role) {
+    this.role = role;
+    this.adventurers = [];
+  }
+  generate (name) {
+    const newAdventurer = new Adventurer(name, this.role);
+    this.adventurers.push(newAdventurer);
+  }
+  findByIndex (index) {
+    return this.adventurers[index];
+  }
+  findByName (name) {
+    return this.adventurers.find((a) => a.name === name);
+  }
+}
+
+const healers = new AdventurerFactory("Healer");
+const robin = healers.generate("Robin");
